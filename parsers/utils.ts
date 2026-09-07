@@ -107,11 +107,20 @@ const TZ_OFFSET_HOURS: Record<string, number> = { WIB: 7, WITA: 8, WIT: 9 };
 export function parseTransactionDate(content: string): Date | null {
   if (!content) return null;
 
+  // Bersihkan tag HTML & entitas agar label dan nilai yang terpisah tag
+  // (mis. "Jam</td><td>01:10:59 WIB") menjadi teks kontigu.
+  const text = content
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&ndash;/gi, "-")
+    .replace(/[ \t\r\n]+/g, " ");
+
   // "5 Sep 2026 Jam 01:10:59 WIB" (optional leading "Tanggal")
   const monthRe =
     /(?:tanggal\s*[:=]?\s*)?(\d{1,2})\s+(january|jan|february|feb|march|mar|april|apr|mei|may|june|jun|july|jul|agustus|agst|august|aug|agu|september|sep|october|oct|okt|november|nov|december|dec|des)\b\.?\s+(\d{2,4})(?:[^0-9]{0,60}?jam\s*(\d{1,2})[:.](\d{2})(?:[:.](\d{2}))?)?(?:[^0-9]{0,10}(WIB|WITA|WIT))?/i;
 
-  let m = content.match(monthRe);
+  let m = text.match(monthRe);
   if (m) {
     const month = MONTHS[m[2].toLowerCase()];
     if (month !== undefined) {
@@ -123,7 +132,7 @@ export function parseTransactionDate(content: string): Date | null {
   // "Tanggal: 01/09/2026" / "01-09-2026" (dd/mm/yyyy)
   const slashRe =
     /tanggal\s*[:=]?\s*(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})(?:[^0-9]{0,40}?jam\s*(\d{1,2})[:.](\d{2})(?:[:.](\d{2}))?)?(?:[^0-9]{0,10}(WIB|WITA|WIT))?/i;
-  m = content.match(slashRe);
+  m = text.match(slashRe);
   if (m) {
     const d = buildDate(parseInt(m[1], 10), parseInt(m[2], 10) - 1, parseInt(m[3], 10), m[4], m[5], m[6], m[7]);
     if (d) return d;

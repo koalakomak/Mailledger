@@ -193,5 +193,12 @@ describe("Transaction Parsers Suite", () => {
 
       expect(parserUtils.parseTransactionDate("tidak ada tanggal")).toBeNull();
     });
+
+    it("should parse date/time split by HTML tags (email template)", () => {
+      const html = 'Tanggal 5 Sep 2026 Jam <td style="padding-top:12px">01:10:59 WIB</td> Nominal';
+      const d = parserUtils.parseTransactionDate(html);
+      expect(d).not.toBeNull();
+      expect(d!.toISOString()).toBe("2026-09-04T18:10:59.000Z");
+    });
   });
 });
