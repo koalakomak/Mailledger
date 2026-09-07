@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { X, Check, AlertCircle } from "lucide-react";
 import { useToast } from "../Toast";
+import { toWibDateTimeLocal, fromWibDateTimeLocal } from "@/lib/utils";
 
 interface Props {
   transaction: any;
@@ -22,9 +23,9 @@ export function EditTransactionModal({ transaction, onClose, onSuccess }: Props)
   const [category, setCategory] = useState(transaction.category || "");
   const [date, setDate] = useState(() => {
     try {
-      return new Date(transaction.transactionDate).toISOString().slice(0, 16);
+      return toWibDateTimeLocal(transaction.transactionDate);
     } catch {
-      return new Date().toISOString().slice(0, 16);
+      return toWibDateTimeLocal(new Date());
     }
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -51,7 +52,7 @@ export function EditTransactionModal({ transaction, onClose, onSuccess }: Props)
         type,
         category: category.trim() || undefined,
         currency: transaction.currency || "IDR",
-        transactionDate: new Date(date).toISOString(),
+        transactionDate: fromWibDateTimeLocal(date),
       };
 
       const res = await fetch(`/api/transactions/${transaction.id}`, {

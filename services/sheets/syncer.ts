@@ -20,9 +20,10 @@ export const DEFAULT_SHEET_HEADERS = [
  * (e.g. 04/09/2026 became April 9th in an en-US spreadsheet).
  */
 function formatSheetDate(date: Date): string {
-  const d = new Date(date);
+  // Tulis jam dalam zona WIB (UTC+7) secara konsisten, apa pun zona server.
+  const w = new Date(new Date(date).getTime() + 7 * 60 * 60 * 1000);
   const pad = (n: number) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  return `${w.getUTCFullYear()}-${pad(w.getUTCMonth() + 1)}-${pad(w.getUTCDate())} ${pad(w.getUTCHours())}:${pad(w.getUTCMinutes())}:${pad(w.getUTCSeconds())}`;
 }
 
 function buildTransactionRow(tx: {
