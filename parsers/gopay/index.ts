@@ -1,5 +1,5 @@
 import { GmailEmail, ParsedTransaction, TransactionParser } from "../types";
-import { extractAmount } from "../utils";
+import { extractAmount, parseTransactionDate } from "../utils";
 
 export class GoPayParser implements TransactionParser {
   sourceSlug = "gopay";
@@ -55,6 +55,8 @@ export class GoPayParser implements TransactionParser {
     }
 
     let transactionDate = email.receivedAt || new Date();
+    const parsedDate = parseTransactionDate(content);
+    if (parsedDate) transactionDate = parsedDate;
     if (email.sender.toLowerCase().includes("gojek.com")) {
       confidence += 10;
     }

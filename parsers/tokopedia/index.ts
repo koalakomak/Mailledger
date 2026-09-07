@@ -1,5 +1,5 @@
 import { GmailEmail, ParsedTransaction, TransactionParser } from "../types";
-import { extractAmount } from "../utils";
+import { extractAmount, parseTransactionDate } from "../utils";
 
 export class TokopediaParser implements TransactionParser {
   sourceSlug = "tokopedia";
@@ -42,6 +42,8 @@ export class TokopediaParser implements TransactionParser {
     }
 
     let transactionDate = email.receivedAt || new Date();
+    const parsedDate = parseTransactionDate(content);
+    if (parsedDate) transactionDate = parsedDate;
     if (email.sender.toLowerCase().includes("tokopedia.com")) {
       confidence += 10;
     }

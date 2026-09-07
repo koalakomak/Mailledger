@@ -9,16 +9,16 @@ export default function SettingsPage() {
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
       <div>
-        <h2 className="text-2xl font-bold text-white tracking-tight">Account & Security Settings</h2>
+        <h2 className="text-2xl font-bold text-white tracking-tight">Pengaturan Akun & Keamanan</h2>
         <p className="text-xs text-slate-400 mt-1">
-          Review your connected Google profile, security permissions, and synchronization preferences.
+          Periksa profil Google yang terhubung, izin keamanan, dan preferensi sinkronisasi Anda.
         </p>
       </div>
 
       <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-6">
         <div>
           <h3 className="text-sm font-semibold text-white flex items-center gap-2 mb-4">
-            <Mail className="w-4 h-4 text-emerald-400" /> Connected Google Account
+            <Mail className="w-4 h-4 text-emerald-400" /> Akun Google Terhubung
           </h3>
           <div className="bg-slate-950/60 p-4 rounded-lg border border-slate-800/80 space-y-2 text-xs">
             <div className="flex justify-between">
@@ -30,7 +30,7 @@ export default function SettingsPage() {
               <span className="text-white font-medium">{session?.user?.name || "N/A"}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-400">Auth Method:</span>
+              <span className="text-slate-400">Metode Autentikasi:</span>
               <span className="text-emerald-400 font-medium">Google OAuth2</span>
             </div>
           </div>
@@ -38,7 +38,7 @@ export default function SettingsPage() {
 
         <div className="pt-4 border-t border-slate-800">
           <h3 className="text-sm font-semibold text-white flex items-center gap-2 mb-4">
-            <Shield className="w-4 h-4 text-indigo-400" /> OAuth Scopes & Data Isolation
+            <Shield className="w-4 h-4 text-indigo-400" /> Scope OAuth & Isolasi Data
           </h3>
           <div className="space-y-2 text-xs text-slate-400">
             <div className="p-3 bg-slate-950/60 rounded-lg border border-slate-800 flex items-center justify-between">

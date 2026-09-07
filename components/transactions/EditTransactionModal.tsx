@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { X, Check, AlertCircle } from "lucide-react";
+import { useToast } from "../Toast";
 
 interface Props {
   transaction: any;
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export function EditTransactionModal({ transaction, onClose, onSuccess }: Props) {
+  const toast = useToast();
   const [merchant, setMerchant] = useState(transaction.merchant || "");
   const [description, setDescription] = useState(transaction.description || "");
   // Handle Prisma Decimal: amount may come as string, number, or Decimal object
@@ -66,6 +68,7 @@ export function EditTransactionModal({ transaction, onClose, onSuccess }: Props)
         return;
       }
 
+      toast("success", "Perubahan transaksi berhasil disimpan.");
       onSuccess();
     } catch (err: any) {
       console.error("Failed to update transaction:", err);
@@ -79,7 +82,7 @@ export function EditTransactionModal({ transaction, onClose, onSuccess }: Props)
     <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-slate-900 border border-slate-800 rounded-xl w-full max-w-lg overflow-hidden shadow-2xl animate-in fade-in zoom-in-95">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
-          <h3 className="font-semibold text-white">Edit Transaction Details</h3>
+          <h3 className="font-semibold text-white">Edit Detail Transaksi</h3>
           <button
             onClick={onClose}
             className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 transition"
@@ -108,7 +111,7 @@ export function EditTransactionModal({ transaction, onClose, onSuccess }: Props)
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-400 mb-1">Description</label>
+            <label className="block text-xs font-medium text-slate-400 mb-1">Deskripsi</label>
             <input
               type="text"
               value={description}
@@ -120,7 +123,7 @@ export function EditTransactionModal({ transaction, onClose, onSuccess }: Props)
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1">Amount (IDR)</label>
+              <label className="block text-xs font-medium text-slate-400 mb-1">Jumlah (IDR)</label>
               <input
                 type="text"
                 inputMode="decimal"
@@ -137,7 +140,7 @@ export function EditTransactionModal({ transaction, onClose, onSuccess }: Props)
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1">Type</label>
+              <label className="block text-xs font-medium text-slate-400 mb-1">Tipe</label>
               <select
                 value={type}
                 onChange={(e) => setType(e.target.value as "INCOME" | "EXPENSE")}
@@ -151,18 +154,18 @@ export function EditTransactionModal({ transaction, onClose, onSuccess }: Props)
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1">Category</label>
+              <label className="block text-xs font-medium text-slate-400 mb-1">Kategori</label>
               <input
                 type="text"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                placeholder="e.g. Food, Transportation"
+                placeholder="cth. Makanan, Transportasi"
                 className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2 text-white focus:outline-none focus:border-emerald-500"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1">Date & Time</label>
+              <label className="block text-xs font-medium text-slate-400 mb-1">Tanggal & Waktu</label>
               <input
                 type="datetime-local"
                 value={date}
@@ -186,7 +189,7 @@ export function EditTransactionModal({ transaction, onClose, onSuccess }: Props)
               className="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow transition disabled:opacity-50"
             >
               <Check className="w-4 h-4" />
-              {isSubmitting ? "Saving..." : "Save Changes"}
+              {isSubmitting ? "Menyimpan..." : "Simpan Perubahan"}
             </button>
           </div>
         </form>

@@ -1,229 +1,116 @@
 # MailLedger
 
-> **Automated Financial Ledger from Gmail to Google Sheets**
+Otomatisasi pencatatan keuangan pribadi dari email notifikasi transaksi (bank dan e-wallet Indonesia) ke Google Sheets, tanpa input manual.
 
-MailLedger adalah aplikasi web SaaS yang secara otomatis membaca email notifikasi transaksi perbankan dan e-wallet di Indonesia (BCA, GoPay, OVO, Shopee, Tokopedia), mengekstrak informasi transaksi menggunakan intelligent parsing & confidence scoring, lalu merekapnya secara otomatis dan rapi ke Google Sheets tanpa input manual.
+MailLedger membaca email transaksi dari Gmail, mengekstrak nominal, tanggal, merchant, dan tipe transaksi menggunakan parser khusus per sumber, menilai tingkat keyakinan hasil ekstraksi, lalu mencatatnya ke Google Sheets. Transaksi dengan keyakinan rendah menunggu tinjauan manual melalui dashboard.
 
----
+## Fitur
 
-## 🌟 Fitur Utama
+- Masuk dengan akun Google (OAuth 2.0) dengan scope Gmail read-only, Google Sheets, dan Drive read-only.
+- Parser bawaan untuk Bank BCA, Livin' by Mandiri, GoPay/Gojek, OVO, Shopee, dan Tokopedia.
+- Normalisasi nominal Rupiah (termasuk format kecil seperti Rp 10,00 dan Rp 1.000,00) dan konversi tanggal/waktu WIB ke UTC.
+- Penilaian keyakinan (confidence) per transaksi:
+  - 80% atau lebih: status otomatis (AUTO), langsung ditulis ke Google Sheets.
+  - Di bawah 80%: masuk antrean tinjauan manual (REVIEW) pada dashboard.
+- Pencegahan duplikasi pada level database dan level lembar kerja Google Sheets.
+- Sinkronisasi berkala otomatis setiap 10 menit melalui GitHub Actions (tanpa bergantung pada cron berbayar).
+- Dashboard responsif untuk perangkat mobile dan desktop.
+- Isolasi data per pengguna dan enkripsi token OAuth (AES-256-GCM) saat disimpan.
 
-- **Google OAuth 2.0 Integration**: Login aman dengan akun Google sekaligus meminta scope `gmail.readonly` dan `spreadsheets`.
-- **Intelligent Transaction Parsing**: Ekstraksi nominal, tanggal transaksi, merchant/penerima, tipe (Income/Expense), dan kategori.
-- **Confidence Scoring & Status Gate**:
-  - Score $\ge 80\%$ $\rightarrow$ `AUTO` (langsung sinkron ke Google Sheets).
-  - Score $< 80\%$ $\rightarrow$ `REVIEW` (antrean tinjauan manual oleh pengguna).
-- **Deduplikasi Cerdas**: Mencegah duplikasi data di level database `(userId, emailMessageId)` dan sheet row check.
-- **Background Worker & Auto-Sync**: Sinkronisasi periodik (setiap 10–15 menit) menggunakan BullMQ + Redis worker dengan fallback.
-- **Initial Backfill**: Mengambil histori transaksi 7 hari terakhir saat pertama kali menghubungkan sumber transaksi.
-- **Interactive Modern Dashboard**: Ringkasan arus kas (Income vs Expense), tabel riwayat transaksi, edit modal, dan log error.
-- **Security & Data Isolation**: Multi-tenant data isolation, enkripsi token OAuth at-rest dengan algoritma **AES-256-GCM**.
+## Alur Kerja
 
----
+1. Pengguna menghubungkan sumber transaksi (misalnya BCA atau Mandiri) di halaman Sumber.
+2. Sistem membaca email yang cocok dengan filter sumber dalam 7 hari terakhir.
+3. Parser mengekstrak transaksi dan menghitung skor keyakinan.
+4. Transaksi disimpan ke PostgreSQL (Prisma).
+5. Transaksi berkeyakinan tinggi langsung ditambahkan ke Google Sheets; sisanya menunggu konfirmasi manual.
 
-## 🏗️ Arsitektur Sistem
+## Arsitektur
 
-```
-Gmail Email
-    │
-    ▼
-Source Detection & Query Filter
-    │
-    ▼
-Parser Registry (BCA, GoPay, OVO, Shopee, Tokopedia)
-    │
-    ▼
-Normalized Transaction (Amount, Date, Merchant, Type, Currency)
-    │
-    ▼
-Confidence Scoring (0 - 100)
-    │
-    ├── Deduplication Check (userId + emailMessageId)
-    │
-    ▼
-Database (PostgreSQL + Prisma)
-    │
-    ├── Score ≥ 80% (AUTO)  ──► Google Sheets API (Append Rows)
-    │
-    └── Score < 80% (REVIEW) ──► Manual Review Queue (Dashboard) ──► Confirm ──► Sheets
-```
+- Aplikasi web: Next.js 14 (App Router) dengan TypeScript dan Tailwind CSS.
+- API: Next.js Route Handlers dengan autentikasi NextAuth.js.
+- Database: PostgreSQL dengan Prisma ORM.
+- Sinkronisasi: endpoint /api/cron/sync dipanggil GitHub Actions setiap 10 menit.
+- Pemrosesan berat (opsional): worker BullMQ untuk pengembangan lokal.
+- Pengujian: Vitest.
 
----
+## Struktur Direktori
 
-## 📦 Tech Stack
+- app - halaman dashboard, rute API, dan tata letak aplikasi.
+- components - komponen UI dashboard.
+- lib - konfigurasi autentikasi, enkripsi, klien Google, dan validasi.
+- parsers - parser email transaksi per sumber dan utilitas bersama.
+- services - logika bisnis: pengambilan email, sinkronisasi Sheets, dan pipeline transaksi.
+- prisma - skema database dan seeder.
+- worker - worker dan scheduler lokal (opsional).
+- tests - pengujian unit dan integrasi.
 
-- **Frontend**: Next.js 14 (App Router), TypeScript, Tailwind CSS, Lucide Icons, Recharts
-- **Backend**: Next.js Route Handlers, NextAuth.js (Google Provider), googleapis
-- **Database & ORM**: PostgreSQL 16, Prisma ORM
-- **Queue & Worker**: BullMQ, Redis (Upstash compatible), tsx runner
-- **Testing**: Vitest, React Testing Library
-- **Security**: AES-256-GCM Token Encryption, Zod Validation
+## Prasyarat
 
----
+- Node.js 20 atau lebih baru.
+- Docker dan Docker Compose (untuk PostgreSQL dan Redis lokal).
+- Project Google Cloud dengan Gmail API, Google Sheets API, dan Google Drive API aktif.
+- Akun Vercel (gratis) untuk deployment dan akun Neon (PostgreSQL) untuk database.
 
-## 📁 Struktur Direktori
+## Menjalankan Secara Lokal
 
-```text
-mailledger/
-├── app/
-│   ├── (auth)/login/          # Halaman Login OAuth
-│   ├── dashboard/             # Dashboard Layout & Pages
-│   │   ├── overview/          # Metrik & Grafik Arus Kas
-│   │   ├── transactions/      # Tabel Semua Transaksi
-│   │   ├── review/            # Antrean Manual Review
-│   │   ├── sources/           # Kelola Sumber Transaksi (BCA, GoPay, dll)
-│   │   ├── spreadsheet/       # Koneksi Google Sheet
-│   │   ├── errors/            # Log Error & Diagnostik
-│   │   └── settings/          # Pengaturan Akun & OAuth
-│   ├── api/                   # REST API BFF (Auth, Gmail, Sheets, Transactions, Sources)
-│   └── page.tsx               # Public Marketing Landing Page
-│
-├── components/                # Komponen UI Dashboard & Tabel
-├── lib/
-│   ├── auth/                  # NextAuth Configuration
-│   ├── db/                    # Prisma Client Singleton
-│   ├── encryption/            # Enkripsi Token AES-256-GCM
-│   ├── google/                # Google API Auth Client (Gmail & Sheets)
-│   └── validation/            # Zod Schemas
-│
-├── parsers/                   # Parser Registry & Implementasi
-│   ├── types.ts               # Interface Transaksi & Parser
-│   ├── registry.ts            # Parser Registry Engine
-│   ├── bca/                   # Parser BCA (QRIS, Transfer, Debit)
-│   ├── mandiri/               # Parser Livin' by Mandiri (QRIS, Transfer, Debit)
-│   ├── gopay/                 # Parser GoPay (GoFood, GoRide, Top Up)
-│   ├── ovo/                   # Parser OVO Payment & Cashback
-│   ├── shopee/                # Parser Shopee Order
-│   └── tokopedia/             # Parser Tokopedia Order
-│
-├── services/                  # Business Logic Layer
-│   ├── gmail/                 # Fetcher & Decoder Gmail Messages
-│   ├── sheets/                # Google Sheets Writer & Formatter
-│   └── transactions/          # Orchestrasi Pipeline
-│
-├── worker/                    # Background Worker & Scheduler
-│   ├── queues/                # BullMQ Queues
-│   ├── processors/            # Worker Processors
-│   └── scheduler/             # Periodic Sync Scheduler Loop
-│
-├── prisma/
-│   ├── schema.prisma          # Skema Database PostgreSQL
-│   └── seed.ts                # Database Seeder untuk Sources
-│
-├── tests/                     # Unit & Integration Test Suites
-├── docker-compose.yml         # Local PostgreSQL & Redis
-├── .env.example               # Environment Variables Template
-└── package.json
-```
+1. Salin file environment dan sesuaikan nilainya.
 
----
+   cp .env.example .env.local
 
-## 🚀 Panduan Menjalankan Secara Lokal
+2. Jalankan PostgreSQL dan Redis.
 
-### 1. Prasyarat
-- Node.js v18+ (disarankan Node.js 20+)
-- Docker & Docker Compose (untuk PostgreSQL & Redis lokal)
-- Akun Google Cloud Platform (untuk OAuth 2.0 Credentials)
+   docker compose up -d
 
-### 2. Setup Environment
-Salin file `.env.example` ke `.env.local`:
-```bash
-cp .env.example .env.local
-```
-Sesuaikan nilainya:
-- `DATABASE_URL`: URL PostgreSQL (misal `postgresql://postgres:postgrespassword@localhost:5432/mailledger`)
-- `NEXTAUTH_SECRET`: Secret key acak
-- `GOOGLE_CLIENT_ID` & `GOOGLE_CLIENT_SECRET`: Dari Google Cloud Console
-- `GOOGLE_ENCRYPTION_KEY`: 32-character key untuk enkripsi refresh token
-- `REDIS_URL`: URL Redis (misal `redis://localhost:6379`)
+3. Siapkan skema dan seeder.
 
-### 3. Jalankan Database & Redis (Docker)
-```bash
-docker compose up -d
-```
+   npm install
+   npx prisma db push
+   npm run db:seed
 
-### 4. Setup Database Schema & Seed
-```bash
-npm install
-npx prisma db push
-npm run db:seed
-```
+4. Jalankan aplikasi web dan worker (dua terminal terpisah).
 
-### 5. Jalankan Web App & Background Worker
-Buka 2 tab terminal:
+   Terminal 1: npm run dev
+   Terminal 2: npm run worker
 
-**Terminal 1 (Web Application):**
-```bash
-npm run dev
-```
-Akses di [http://localhost:3000](http://localhost:3000).
+Akses aplikasi di http://localhost:3000.
 
-**Terminal 2 (Background Worker & Scheduler):**
-```bash
-npm run worker
-```
+## Variabel Lingkungan
 
----
+Daftar lengkap tersedia di .env.example. Variabel penting:
 
-## 🧪 Menjalankan Pengujian
+- DATABASE_URL dan DIRECT_URL: koneksi PostgreSQL.
+- NEXTAUTH_URL dan NEXT_PUBLIC_APP_URL: URL publik aplikasi.
+- NEXTAUTH_SECRET: kunci sesi NextAuth.
+- GOOGLE_CLIENT_ID dan GOOGLE_CLIENT_SECRET: kredensial OAuth Google.
+- GOOGLE_ENCRYPTION_KEY: kunci enkripsi token OAuth (AES-256-GCM).
+- CRON_SECRET: opsional, melindungi endpoint /api/cron/sync.
 
-```bash
-# Menjalankan seluruh test suite (Unit & Integration)
-npm run test
+Jangan pernah menyimpan file .env atau .env.local ke repositori; keduanya telah dikecualikan oleh .gitignore.
 
-# Menjalankan pemeriksaan type TypeScript
-npm run typecheck
+## Deployment di Vercel
 
-# Menjalankan pemeriksaan ESLint
-npm run lint
+1. Unggah repositori ke GitHub, lalu impor ke Vercel.
+2. Isi seluruh variabel lingkungan pada pengaturan project Vercel.
+3. Tambahkan redirect URI pada OAuth Client di Google Cloud Console:
+   - https://<nama-project>.vercel.app/api/auth/callback/google
+4. Deploy. Sinkronisasi berkala dijalankan oleh GitHub Actions melalui .github/workflows/sync.yml.
 
-# Menjalankan Production Build
-npm run build
-```
+## Pengujian
 
----
+  npm run test
+  npm run typecheck
+  npm run lint
+  npm run build
 
-## 🔒 Konfigurasi Google Cloud Console (OAuth)
+## Keamanan
 
-1. Buka [Google Cloud Console](https://console.cloud.google.com/).
-2. Buat Project baru bernama `MailLedger`.
-3. Aktifkan API berikut di **Enabled APIs & Services**:
-   - **Gmail API**
-   - **Google Sheets API**
-   - **Google Drive API**
-4. Konfigurasikan **OAuth Consent Screen**:
-   - User Type: External
-   - Scopes yang ditambahkan:
-     - `.../auth/userinfo.email`
-     - `.../auth/userinfo.profile`
-     - `https://www.googleapis.com/auth/gmail.readonly`
-     - `https://www.googleapis.com/auth/spreadsheets`
-     - `https://www.googleapis.com/auth/drive.readonly`
-5. Buat **OAuth Client ID**:
-   - Application Type: Web application
-   - Authorized JavaScript origins: `http://localhost:3000`
-   - Authorized redirect URIs: `http://localhost:3000/api/auth/callback/google`
-6. Salin Client ID dan Client Secret ke `.env.local`.
+- Token refresh Google disimpan terenkripsi dengan AES-256-GCM.
+- Seluruh kueri data dibatasi oleh identitas pengguna yang sedang masuk.
+- Header keamanan (CSP, X-Frame-Options, Referrer-Policy, dan lainnya) diterapkan pada setiap respons.
+- Endpoint sinkronisasi berkala dilindungi CRON_SECRET.
+- Jangan menaruh kredensial di kode; gunakan variabel lingkungan dan rahasia deployment.
 
----
+## Lisensi
 
-## 📄 Format Tabel Google Sheets
-Saat pertama kali spreadsheet dihubungkan, MailLedger akan otomatis membuat struktur kolom:
-
-| Tanggal | Deskripsi | Merchant | Tipe | Jumlah | Mata Uang | Kategori | Sumber | ID Email |
-|---|---|---|---|---|---|---|---|---|
-| 2026-09-04 14:30:00 | Transaksi QRIS BCA | Kopi Kenangan | EXPENSE | 75000 | IDR | Shopping | Bank Central Asia (BCA) | 18f... |
-
-> Format tanggal yang ditulis ke Sheets adalah `YYYY-MM-DD HH:mm:ss` (locale-independent) agar tidak ambigu antar-locale spreadsheet.
-
----
-
-## 🛡️ Keamanan & Isolasi Data
-- MailLedger menerapkan isolasi ketat antar-user (`WHERE userId = session.user.id`).
-- Refresh token Google disimpan dalam bentuk terenkripsi menggunakan **AES-256-GCM**.
-- Konten email sensitif dan kredensial tidak pernah diekspos ke client-side atau log server.
-
----
-
-## 📜 Lisensi
-MailLedger dirilis di bawah lisensi MIT.
+MIT

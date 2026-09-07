@@ -31,9 +31,9 @@ export default function ErrorsPage() {
     <div className="space-y-6 max-w-7xl mx-auto">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-white tracking-tight">Error Logs & Diagnostics</h2>
+          <h2 className="text-2xl font-bold text-white tracking-tight">Log Error & Diagnostik</h2>
           <p className="text-xs text-slate-400 mt-1">
-            Review email parsing issues and sync failures for debugging and improvement.
+            Periksa masalah parsing email dan kegagalan sinkronisasi untuk perbaikan.
           </p>
         </div>
 
@@ -42,7 +42,7 @@ export default function ErrorsPage() {
           disabled={loading}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 transition"
         >
-          <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} /> Refresh
+          <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} /> Muat Ulang
         </button>
       </div>
 
@@ -52,9 +52,9 @@ export default function ErrorsPage() {
         </div>
       ) : logs.length === 0 ? (
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-12 text-center text-slate-400">
-          <p className="text-sm font-semibold text-emerald-400">No error logs recorded.</p>
+          <p className="text-sm font-semibold text-emerald-400">Belum ada log error.</p>
           <span className="text-xs text-slate-500 block mt-1">
-            All recent email parser executions were successful.
+            Semua proses parsing email terbaru berhasil.
           </span>
         </div>
       ) : (
@@ -63,10 +63,10 @@ export default function ErrorsPage() {
             <table className="w-full text-left text-sm text-slate-300">
               <thead className="bg-slate-950/60 text-xs font-semibold text-slate-400 uppercase tracking-wider border-b border-slate-800">
                 <tr>
-                  <th className="px-6 py-3.5">Timestamp</th>
+                  <th className="px-6 py-3.5">Waktu</th>
                   <th className="px-6 py-3.5">Status</th>
-                  <th className="px-6 py-3.5">Error Message</th>
-                  <th className="px-6 py-3.5">Details</th>
+                  <th className="px-6 py-3.5">Pesan Error</th>
+                  <th className="px-6 py-3.5">Detail</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800 font-mono text-xs">

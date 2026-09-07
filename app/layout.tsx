@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 import "./globals.css";
+
+const geistSans = localFont({
+  src: "./fonts/GeistVF.woff",
+  variable: "--font-geist-sans",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "MailLedger — Otomasi Email Transaksi ke Google Sheets",
@@ -13,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" className="dark">
-      <body className="bg-slate-950 text-slate-100 antialiased selection:bg-emerald-500 selection:text-black">
+      <body className={geistSans.variable + " bg-slate-950 text-slate-100 antialiased selection:bg-emerald-500 selection:text-black"}>
         {children}
       </body>
     </html>

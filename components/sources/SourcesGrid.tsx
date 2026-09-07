@@ -54,11 +54,11 @@ export function SourcesGrid({ sources, onToggle, onSyncSource }: Props) {
               <span className="font-bold text-base text-white">{src.name}</span>
               {src.isConnected ? (
                 <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
-                  <CheckCircle2 className="w-3.5 h-3.5" /> Connected
+                  <CheckCircle2 className="w-3.5 h-3.5" /> Terhubung
                 </span>
               ) : (
                 <span className="inline-flex items-center gap-1 text-xs font-semibold text-slate-400 bg-slate-800 px-2 py-0.5 rounded-full border border-slate-700">
-                  <XCircle className="w-3.5 h-3.5" /> Not Connected
+                  <XCircle className="w-3.5 h-3.5" /> Belum Terhubung
                 </span>
               )}
             </div>
@@ -69,9 +69,9 @@ export function SourcesGrid({ sources, onToggle, onSyncSource }: Props) {
 
             <div className="mt-3 text-xs text-slate-400">
               {src.lastSyncedAt ? (
-                <span>Last sync: {formatDate(src.lastSyncedAt)}</span>
+                <span>Sinkron terakhir: {formatDate(src.lastSyncedAt)}</span>
               ) : (
-                <span>Never synced</span>
+                <span>Belum pernah sinkron</span>
               )}
             </div>
           </div>
@@ -87,7 +87,7 @@ export function SourcesGrid({ sources, onToggle, onSyncSource }: Props) {
               } disabled:opacity-50`}
             >
               <Power className="w-3.5 h-3.5" />
-              {src.isConnected ? "Disconnect" : "Connect Source"}
+              {src.isConnected ? "Putuskan" : "Hubungkan Sumber"}
             </button>
 
             {src.isConnected && (
@@ -95,10 +95,10 @@ export function SourcesGrid({ sources, onToggle, onSyncSource }: Props) {
                 onClick={() => handleSync(src.id)}
                 disabled={loadingId === src.id}
                 className="py-1.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium flex items-center gap-1 transition disabled:opacity-50"
-                title="Sync this source now"
+                title="Sinkronkan sumber ini sekarang"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${loadingId === src.id ? "animate-spin" : ""}`} />
-                Sync
+                Sinkronkan
               </button>
             )}
           </div>

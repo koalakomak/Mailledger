@@ -66,16 +66,16 @@ export default function SourcesPage() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
       <div>
-        <h2 className="text-2xl font-bold text-white tracking-tight">Transaction Sources</h2>
+        <h2 className="text-2xl font-bold text-white tracking-tight">Sumber Transaksi</h2>
         <p className="text-xs text-slate-400 mt-1">
-          Enable or disable transaction source parsers. When connected, an initial backfill of the last 7 days is automatically triggered.
+          Aktifkan atau nonaktifkan parser sumber transaksi. Saat dihubungkan, pencarian awal 7 hari terakhir akan dijalankan otomatis.
         </p>
       </div>
 
       <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-400 flex items-center gap-3">
         <Info className="w-4 h-4 text-emerald-400 flex-shrink-0" />
         <span>
-          MailLedger only reads emails matching specific bank/e-wallet filters and never stores irrelevant emails.
+          MailLedger hanya membaca email yang sesuai filter bank/e-wallet tertentu dan tidak pernah menyimpan email yang tidak relevan.
         </span>
       </div>
 

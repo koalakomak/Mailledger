@@ -31,9 +31,9 @@ export default function ReviewPage() {
     <div className="space-y-6 max-w-7xl mx-auto">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-white tracking-tight">Manual Review Queue</h2>
+          <h2 className="text-2xl font-bold text-white tracking-tight">Antrean Tinjauan Manual</h2>
           <p className="text-xs text-slate-400 mt-1">
-            Transactions with confidence score below 80% require your verification before syncing to Google Sheets.
+            Transaksi dengan skor keyakinan di bawah 80% memerlukan verifikasi Anda sebelum disinkronkan ke Google Sheets.
           </p>
         </div>
 
@@ -42,14 +42,14 @@ export default function ReviewPage() {
           disabled={loading}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 transition"
         >
-          <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} /> Refresh
+          <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} /> Muat Ulang
         </button>
       </div>
 
       <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300 flex items-center gap-3">
         <AlertCircle className="w-5 h-5 flex-shrink-0" />
         <span>
-          Click the edit icon to adjust extracted fields or click <strong>Confirm</strong> to approve the entry and automatically write it to your connected Google Sheet.
+          Klik ikon edit untuk menyesuaikan hasil ekstraksi, atau klik <strong>Confirm</strong> untuk menyetujui dan otomatis menuliskannya ke Google Sheet yang terhubung.
         </span>
       </div>
 

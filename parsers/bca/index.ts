@@ -1,5 +1,5 @@
 import { GmailEmail, ParsedTransaction, TransactionParser } from "../types";
-import { extractAmount } from "../utils";
+import { extractAmount, parseTransactionDate } from "../utils";
 
 export class BCAParser implements TransactionParser {
   sourceSlug = "bca";
@@ -71,16 +71,10 @@ export class BCAParser implements TransactionParser {
 
     // 4. Extract Date
     let transactionDate = email.receivedAt || new Date();
-    const dateMatch =
-      content.match(/tanggal\s*[:=]\s*(\d{2}[\/\-]\d{2}[\/\-]\d{4})/i) ||
-      content.match(/(\d{2}\s+(?:Jan|Feb|Mar|Apr|Mei|Jun|Jul|Agu|Sep|Okt|Nov|Des)[a-z]*\s+\d{4})/i);
-
-    if (dateMatch) {
-      const parsedDate = new Date(dateMatch[1]);
-      if (!isNaN(parsedDate.getTime())) {
-        transactionDate = parsedDate;
-        confidence += 15;
-      }
+    const parsedDate = parseTransactionDate(content);
+    if (parsedDate) {
+      transactionDate = parsedDate;
+      confidence += 15;
     }
 
     // Sender bonus

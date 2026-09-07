@@ -44,9 +44,9 @@ export default function TransactionsPage() {
     <div className="space-y-6 max-w-7xl mx-auto">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-white tracking-tight">All Transactions</h2>
+          <h2 className="text-2xl font-bold text-white tracking-tight">Semua Transaksi</h2>
           <p className="text-xs text-slate-400 mt-1">
-            Browse, filter, and manage all parsed financial records.
+            Jelajahi, filter, dan kelola semua catatan keuangan yang berhasil diekstrak.
           </p>
         </div>
 
@@ -55,7 +55,7 @@ export default function TransactionsPage() {
           disabled={loading}
           className="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 transition"
         >
-          <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} /> Refresh
+          <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} /> Muat Ulang
         </button>
       </div>
 
@@ -65,7 +65,7 @@ export default function TransactionsPage() {
           <Search className="w-4 h-4 absolute left-3 top-3 text-slate-500" />
           <input
             type="text"
-            placeholder="Search merchant, description..."
+            placeholder="Cari merchant, deskripsi..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-9 pr-4 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
@@ -78,10 +78,10 @@ export default function TransactionsPage() {
             onChange={(e) => setStatus(e.target.value)}
             className="bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-300 focus:outline-none focus:border-emerald-500"
           >
-            <option value="ALL">All Status</option>
-            <option value="AUTO">Auto Approved</option>
-            <option value="CONFIRMED">Manually Confirmed</option>
-            <option value="REVIEW">Needs Review</option>
+            <option value="ALL">Semua Status</option>
+            <option value="AUTO">Otomatis</option>
+            <option value="CONFIRMED">Dikonfirmasi</option>
+            <option value="REVIEW">Perlu Tinjauan</option>
           </select>
 
           <select
@@ -89,7 +89,7 @@ export default function TransactionsPage() {
             onChange={(e) => setSource(e.target.value)}
             className="bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-300 focus:outline-none focus:border-emerald-500"
           >
-            <option value="ALL">All Sources</option>
+            <option value="ALL">Semua Sumber</option>
             <option value="bca">BCA</option>
             <option value="mandiri">Livin&apos; by Mandiri</option>
             <option value="gopay">GoPay</option>

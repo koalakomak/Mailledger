@@ -1,9 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { OverviewCards } from "@/components/dashboard/OverviewCards";
-import { IncomeExpenseChart } from "@/components/dashboard/IncomeExpenseChart";
 import { TransactionTable } from "@/components/transactions/TransactionTable";
+
+const IncomeExpenseChart = dynamic(
+  () => import("@/components/dashboard/IncomeExpenseChart").then((m) => m.IncomeExpenseChart),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-sm h-64 animate-pulse" />
+    ),
+  }
+);
 import { RefreshCw, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
@@ -50,9 +60,9 @@ export default function OverviewPage() {
   return (
     <div className="space-y-8 max-w-7xl mx-auto">
       <div>
-        <h2 className="text-2xl font-bold text-white tracking-tight">Overview Dashboard</h2>
+        <h2 className="text-2xl font-bold text-white tracking-tight">Ringkasan Dashboard</h2>
         <p className="text-xs text-slate-400 mt-1">
-          Monitor your automated email financial extractions and synchronization status.
+          Pantau hasil ekstraksi email transaksi otomatis dan status sinkronisasi Anda.
         </p>
       </div>
 
@@ -66,12 +76,12 @@ export default function OverviewPage() {
         <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-sm flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-white">Recent Transactions</h3>
+              <h3 className="font-semibold text-white">Transaksi Terbaru</h3>
               <Link
                 href="/dashboard/transactions"
                 className="text-xs font-semibold text-emerald-400 hover:text-emerald-300 flex items-center gap-1"
               >
-                View all <ArrowRight className="w-3.5 h-3.5" />
+                Lihat semua <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
             <TransactionTable

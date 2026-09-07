@@ -52,9 +52,9 @@ export default function SpreadsheetPage() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
       <div>
-        <h2 className="text-2xl font-bold text-white tracking-tight">Google Sheets Connection</h2>
+        <h2 className="text-2xl font-bold text-white tracking-tight">Koneksi Google Spreadsheet</h2>
         <p className="text-xs text-slate-400 mt-1">
-          Select or change the target Google Spreadsheet where your parsed transactions will be recorded.
+          Pilih atau ubah Google Spreadsheet tujuan tempat transaksi Anda akan dicatat.
         </p>
       </div>
 

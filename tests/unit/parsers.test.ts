@@ -5,6 +5,7 @@ import { OVOParser } from "@/parsers/ovo";
 import { ShopeeParser } from "@/parsers/shopee";
 import { TokopediaParser } from "@/parsers/tokopedia";
 import { parserRegistry } from "@/parsers/registry";
+import * as parserUtils from "@/parsers/utils";
 import { GmailEmail } from "@/parsers/types";
 
 describe("Transaction Parsers Suite", () => {
@@ -168,6 +169,29 @@ describe("Transaction Parsers Suite", () => {
       const parser = parserRegistry.findParserForEmail(bcaEmail);
       expect(parser).toBeDefined();
       expect(parser?.sourceSlug).toBe("bca");
+    });
+  });
+
+  describe("Amount & Date utilities", () => {
+    it("should parse small IDR amounts correctly", () => {
+      expect(parserUtils.normalizeAmount("10,00")).toBe(10);
+      expect(parserUtils.normalizeAmount("100,00")).toBe(100);
+      expect(parserUtils.normalizeAmount("2,00")).toBe(2);
+      expect(parserUtils.normalizeAmount("1.000,00")).toBe(1000);
+      expect(parserUtils.normalizeAmount("10.000,00")).toBe(10000);
+      expect(parserUtils.normalizeAmount("75.000,00")).toBe(75000);
+    });
+
+    it("should parse Indonesian date/time to UTC", () => {
+      const d = parserUtils.parseTransactionDate("Tanggal 5 Sep 2026 Jam 01:10:59 WIB");
+      expect(d).not.toBeNull();
+      // 01:10:59 WIB == 18:10:59 UTC on the previous day
+      expect(d!.toISOString()).toBe("2026-09-04T18:10:59.000Z");
+
+      const d2 = parserUtils.parseTransactionDate("Tanggal: 01/09/2026");
+      expect(d2!.toISOString()).toBe("2026-08-31T17:00:00.000Z"); // 01 Sep 00:00 WIB -> 31 Aug 17:00 UTC
+
+      expect(parserUtils.parseTransactionDate("tidak ada tanggal")).toBeNull();
     });
   });
 });

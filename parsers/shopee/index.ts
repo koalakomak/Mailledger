@@ -1,5 +1,5 @@
 import { GmailEmail, ParsedTransaction, TransactionParser } from "../types";
-import { extractAmount } from "../utils";
+import { extractAmount, parseTransactionDate } from "../utils";
 
 export class ShopeeParser implements TransactionParser {
   sourceSlug = "shopee";
@@ -42,6 +42,8 @@ export class ShopeeParser implements TransactionParser {
     }
 
     let transactionDate = email.receivedAt || new Date();
+    const parsedDate = parseTransactionDate(content);
+    if (parsedDate) transactionDate = parsedDate;
     if (email.sender.toLowerCase().includes("shopee.co.id")) {
       confidence += 10;
     }
