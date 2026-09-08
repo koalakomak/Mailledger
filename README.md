@@ -9,11 +9,7 @@ Otomatisasi pencatatan keuangan pribadi dari email notifikasi transaksi (bank da
 
 MailLedger membaca email transaksi dari Gmail, mengekstrak nominal, tanggal, merchant, dan tipe transaksi menggunakan parser khusus per sumber, menilai tingkat keyakinan hasil ekstraksi, lalu mencatatnya ke Google Sheets. Transaksi dengan keyakinan rendah menunggu tinjauan manual melalui dashboard.
 
-## Tangkapan Layar
 
-Tambahkan tangkapan layar dashboard pada folder docs/screenshots lalu ganti nama berkas pada tautan di bawah ini.
-
-![Dashboard MailLedger](docs/screenshots/dashboard.png)
 
 ## Fitur
 
