@@ -75,7 +75,7 @@ MailLedger membaca email transaksi dari Gmail, mengekstrak nominal, tanggal, mer
 
 Akses aplikasi di http://localhost:3000.
 
-## Variabel Lingkungan
+## Variabel Environtment
 
 Daftar lengkap tersedia di .env.example. Variabel penting:
 
@@ -91,7 +91,7 @@ Jangan pernah menyimpan file .env atau .env.local ke repositori; keduanya telah 
 ## Deployment di Vercel
 
 1. Unggah repositori ke GitHub, lalu impor ke Vercel.
-2. Isi seluruh variabel lingkungan pada pengaturan project Vercel.
+2. Isi seluruh variabel Environtment pada pengaturan project Vercel.
 3. Tambahkan redirect URI pada OAuth Client di Google Cloud Console:
    - https://<nama-project>.vercel.app/api/auth/callback/google
 4. Deploy. Sinkronisasi berkala dijalankan oleh GitHub Actions melalui .github/workflows/sync.yml.
@@ -109,7 +109,7 @@ Jangan pernah menyimpan file .env atau .env.local ke repositori; keduanya telah 
 - Seluruh kueri data dibatasi oleh identitas pengguna yang sedang masuk.
 - Header keamanan (CSP, X-Frame-Options, Referrer-Policy, dan lainnya) diterapkan pada setiap respons.
 - Endpoint sinkronisasi berkala dilindungi CRON_SECRET.
-- Jangan menaruh kredensial di kode; gunakan variabel lingkungan dan rahasia deployment.
+- Jangan menaruh kredensial di kode; gunakan variabel Environtment dan rahasia deployment.
 
 ## Lisensi
 
