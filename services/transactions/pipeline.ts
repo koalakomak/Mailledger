@@ -3,6 +3,7 @@ import { parserRegistry } from "@/parsers/registry";
 import { CONFIDENCE_THRESHOLDS, determineStatus, GmailEmail, ParsedTransaction } from "@/parsers/types";
 import { fetchEmailsForQuery } from "@/services/gmail/fetcher";
 import { appendTransactionsToSheet } from "@/services/sheets/syncer";
+import { categorizeTransaction } from "@/lib/categorize";
 
 export interface SyncResult {
   sourceSlug: string;
@@ -73,7 +74,13 @@ export async function processSingleEmail(
       return { status: "SKIPPED", error: "Below minimum confidence threshold" };
     }
 
-    // 5. Save Transaction to DB
+    // 5. Save Transaction to DB (kategori otomatis dari aturan user + default)
+    const category = await categorizeTransaction(
+      userId,
+      parsed.merchant,
+      parsed.description,
+      parsed.category
+    );
     const transaction = await prisma.transaction.create({
       data: {
         userId,
@@ -88,7 +95,7 @@ export async function processSingleEmail(
         type: parsed.type,
         amount: parsed.amount,
         currency: parsed.currency || "IDR",
-        category: parsed.category,
+        category,
         confidence: parsed.confidence,
         status,
         rawData: parsed.rawDetails || {},

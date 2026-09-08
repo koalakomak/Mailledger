@@ -1,8 +1,19 @@
 # MailLedger
 
+[![CI](https://github.com/koalakomak/Mailledger/actions/workflows/ci.yml/badge.svg)](https://github.com/koalakomak/Mailledger/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+![Next.js](https://img.shields.io/badge/Next.js-14-black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
+
 Otomatisasi pencatatan keuangan pribadi dari email notifikasi transaksi (bank dan e-wallet Indonesia) ke Google Sheets, tanpa input manual.
 
 MailLedger membaca email transaksi dari Gmail, mengekstrak nominal, tanggal, merchant, dan tipe transaksi menggunakan parser khusus per sumber, menilai tingkat keyakinan hasil ekstraksi, lalu mencatatnya ke Google Sheets. Transaksi dengan keyakinan rendah menunggu tinjauan manual melalui dashboard.
+
+## Tangkapan Layar
+
+Tambahkan tangkapan layar dashboard pada folder docs/screenshots lalu ganti nama berkas pada tautan di bawah ini.
+
+![Dashboard MailLedger](docs/screenshots/dashboard.png)
 
 ## Fitur
 
@@ -15,6 +26,8 @@ MailLedger membaca email transaksi dari Gmail, mengekstrak nominal, tanggal, mer
 - Pencegahan duplikasi pada level database dan level lembar kerja Google Sheets.
 - Sinkronisasi berkala otomatis setiap 10 menit melalui GitHub Actions (tanpa bergantung pada cron berbayar).
 - Dashboard responsif untuk perangkat mobile dan desktop.
+- Kategori otomatis dari merchant dengan aturan yang dapat disesuaikan pengguna.
+- Ringkasan keuangan bulanan (pemasukan, pengeluaran, kategori terbesar) dikirim otomatis melalui email setiap awal bulan.
 - Isolasi data per pengguna dan enkripsi token OAuth (AES-256-GCM) saat disimpan.
 
 ## Alur Kerja
@@ -113,4 +126,4 @@ Jangan pernah menyimpan file .env atau .env.local ke repositori; keduanya telah 
 
 ## Lisensi
 
-MIT
+Proyek ini dilisensikan di bawah [MIT License](LICENSE).

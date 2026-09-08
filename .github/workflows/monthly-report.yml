@@ -1,0 +1,14 @@
+name: MailLedger Monthly Report
+
+on:
+  schedule:
+    - cron: '0 1 1 * *'
+  workflow_dispatch:
+
+jobs:
+  monthly:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kirim rekap bulanan
+        run: |
+          curl -fsS -m 240 -X GET             -H "x-cron-secret: ${{ secrets.CRON_SECRET }}"             "https://mailledger.vercel.app/api/reports/monthly"             || echo "::warning::Rekap bulanan gagal dikirim"

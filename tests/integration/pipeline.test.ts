@@ -26,6 +26,9 @@ vi.mock("@/lib/db/prisma", () => {
       source: {
         findUnique: vi.fn(async () => ({ id: "src-bca-id", slug: "bca", name: "BCA" })),
       },
+      userCategoryRule: {
+        findMany: vi.fn(async () => []),
+      },
     },
   };
 });

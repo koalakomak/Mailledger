@@ -23,6 +23,7 @@ model User {
   spreadsheetConnections SpreadsheetConnection[]
   transactions           Transaction[]
   transactionLogs        TransactionLog[]
+  categoryRules          UserCategoryRule[]
 
   @@map("users")
 }
@@ -163,4 +164,18 @@ model TransactionLog {
   user          User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("transaction_logs")
+}
+
+model UserCategoryRule {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  keyword   String
+  category  String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("user_category_rules")
 }
