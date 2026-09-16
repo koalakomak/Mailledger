@@ -112,9 +112,9 @@ export function CategoryRulesManager() {
       </form>
 
       {loading ? (
-        <p className="text-xs text-slate-500">Memuat aturan...</p>
+        <p className="text-xs text-slate-400">Memuat aturan...</p>
       ) : rules.length === 0 ? (
-        <p className="text-xs text-slate-500 bg-slate-950/50 border border-slate-800 rounded-lg p-4">
+        <p className="text-xs text-slate-400 bg-slate-950/50 border border-slate-800 rounded-lg p-4">
           Belum ada aturan. Tambahkan kata kunci agar transaksi otomatis masuk kategori yang Anda inginkan.
         </p>
       ) : (

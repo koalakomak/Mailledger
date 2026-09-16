@@ -27,10 +27,14 @@ export function IncomeExpenseChart({ income, expense }: Props) {
 
   return (
     <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-sm">
-      <h3 className="text-base font-semibold text-white mb-4">Ringkasan Arus Keuangan</h3>
-      <div className="h-64 w-full">
+      <h3 className="text-base font-semibold text-white mb-1">Ringkasan Arus Keuangan</h3>
+      <p className="text-xs text-slate-400 mb-4">
+        Pemasukan {new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(income)} ·
+        Pengeluaran {new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(expense)}
+      </p>
+      <div className="h-64 w-full" role="img" aria-label={"Grafik batang pemasukan dan pengeluaran. Pemasukan " + income + " rupiah, pengeluaran " + expense + " rupiah."}>
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} margin={{ top: 10, right: 10, left: 10, bottom: 5 }}>
+          <BarChart data={data} margin={{ top: 10, right: 10, left: 10, bottom: 5 }} accessibilityLayer>
             <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
             <XAxis dataKey="name" stroke="#94a3b8" />
             <YAxis stroke="#94a3b8" />

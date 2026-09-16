@@ -106,7 +106,7 @@ export function SheetConnectCard({ spreadsheets, connection, onConnect }: Props)
             required
             className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3.5 py-2.5 text-white focus:outline-none focus:border-emerald-500 font-mono text-xs"
           />
-          <span className="text-[11px] text-slate-500 block mt-1">
+          <span className="text-[11px] text-slate-400 block mt-1">
             Jika tab belum ada, MailLedger akan membuatnya dan menginisialisasi header standar.
           </span>
         </div>

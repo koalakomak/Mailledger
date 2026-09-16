@@ -37,6 +37,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
   return (
     <aside
       className={"fixed inset-y-0 left-0 z-50 w-64 max-w-[80vw] bg-slate-900 border-r border-slate-800 flex flex-col text-slate-300 transform transition-transform duration-200 lg:static lg:translate-x-0 lg:z-auto " + (open ? "translate-x-0" : "-translate-x-full")}
+      id="app-sidebar"
       aria-label="Navigasi utama"
     >
       {/* Brand */}
@@ -69,7 +70,8 @@ export function Sidebar({ open, onClose }: SidebarProps) {
               key={item.name}
               href={item.href}
               onClick={onClose}
-              className={"flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all " + (isActive ? "bg-emerald-600 text-white shadow-sm shadow-emerald-900/50" : "text-slate-400 hover:text-slate-100 hover:bg-slate-800/60")}
+              aria-current={isActive ? "page" : undefined}
+              className={"flex items-center gap-3 px-3.5 py-3 min-h-11 rounded-lg text-sm font-medium transition-all " + (isActive ? "bg-emerald-600 text-white shadow-sm shadow-emerald-900/50" : "text-slate-400 hover:text-slate-100 hover:bg-slate-800/60")}
             >
               <Icon className={isActive ? "w-4 h-4 text-white" : "w-4 h-4 text-slate-400"} />
               {item.name}
@@ -82,7 +84,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
       <div className="p-4 border-t border-slate-800 shrink-0">
         <button
           onClick={() => signOut({ callbackUrl: "/" })}
-          className="flex items-center gap-3 w-full px-3.5 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
+          className="flex items-center gap-3 w-full px-3.5 py-3 min-h-11 rounded-lg text-sm font-medium text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
         >
           <LogOut className="w-4 h-4" />
           Keluar

@@ -9,9 +9,10 @@ import { useToast } from "../Toast";
 interface HeaderProps {
   onSyncTriggered?: () => void;
   onMenuClick?: () => void;
+  navOpen?: boolean;
 }
 
-export function Header({ onSyncTriggered, onMenuClick }: HeaderProps) {
+export function Header({ onSyncTriggered, onMenuClick, navOpen = false }: HeaderProps) {
   const { data: session } = useSession();
   const [isSyncing, setIsSyncing] = useState(false);
   const toast = useToast();
@@ -46,8 +47,10 @@ export function Header({ onSyncTriggered, onMenuClick }: HeaderProps) {
       <div className="flex items-center gap-2 min-w-0">
         <button
           onClick={onMenuClick}
-          className="lg:hidden p-2 -ml-1 rounded-md text-slate-300 hover:text-white hover:bg-slate-800 transition shrink-0"
+          className="lg:hidden p-2.5 -ml-1 rounded-md text-slate-300 hover:text-white hover:bg-slate-800 transition shrink-0"
           aria-label="Buka menu navigasi"
+          aria-expanded={navOpen}
+          aria-controls="app-sidebar"
         >
           <Menu className="w-5 h-5" />
         </button>
@@ -60,7 +63,8 @@ export function Header({ onSyncTriggered, onMenuClick }: HeaderProps) {
         <button
           onClick={handleManualSync}
           disabled={isSyncing}
-          className="flex items-center gap-2 px-3 py-2 sm:px-3.5 sm:py-1.5 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow transition disabled:opacity-50 whitespace-nowrap"
+          aria-busy={isSyncing}
+          className="flex items-center gap-2 px-3 py-2.5 sm:px-3.5 sm:py-2 min-h-11 sm:min-h-0 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow transition disabled:opacity-50 whitespace-nowrap"
         >
           <RefreshCw className={"w-3.5 h-3.5 " + (isSyncing ? "animate-spin" : "")} />
           {isSyncing ? "Menyinkronkan..." : "Sinkronkan Sekarang"}

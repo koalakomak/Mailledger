@@ -13,7 +13,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       <div className="flex h-screen bg-slate-950 text-slate-100 overflow-hidden">
         <Sidebar open={navOpen} onClose={() => setNavOpen(false)} />
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-          <Header onMenuClick={() => setNavOpen(true)} />
+          <Header onMenuClick={() => setNavOpen(true)} navOpen={navOpen} />
           <main className="flex-1 overflow-y-auto p-4 sm:p-8">{children}</main>
         </div>
 

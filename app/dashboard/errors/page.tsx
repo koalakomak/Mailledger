@@ -53,7 +53,7 @@ export default function ErrorsPage() {
       ) : logs.length === 0 ? (
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-12 text-center text-slate-400">
           <p className="text-sm font-semibold text-emerald-400">Belum ada log error.</p>
-          <span className="text-xs text-slate-500 block mt-1">
+          <span className="text-xs text-slate-400 block mt-1">
             Semua proses parsing email terbaru berhasil.
           </span>
         </div>

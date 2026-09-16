@@ -96,7 +96,7 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-slate-900 py-8 text-center text-xs text-slate-500">
+      <footer className="border-t border-slate-900 py-8 text-center text-xs text-slate-400">
         <p>© 2026 MailLedger. All rights reserved. Built for automated financial tracking.</p>
       </footer>
     </div>

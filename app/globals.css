@@ -28,3 +28,41 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #334155;
 }
+/* ===== Aksesibilitas (UI/UX Pro Max: prioritas #1, #2, #7) ===== */
+/* Fokus keyboard selalu terlihat (WCAG 2.2 - Focus Appearance) */
+:focus-visible {
+  outline: 2px solid #34d399;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Jangan hilangkan indikator fokus pada kontrol yang memakai outline-none */
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid #34d399;
+  outline-offset: 2px;
+}
+
+/* Target sentuh nyaman di perangkat sentuh (WCAG Target Size) */
+@media (pointer: coarse) {
+  button,
+  a[role="button"],
+  [role="button"] {
+    min-height: 44px;
+  }
+}
+
+/* Hormati preferensi pengurangan gerakan */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

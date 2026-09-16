@@ -37,9 +37,11 @@ function StatusBadge({ status }: { status: Transaction["status"] }) {
 
 export function TransactionTable({ transactions, onRefresh, showReviewActionsOnly = false }: Props) {
   const [selectedTx, setSelectedTx] = useState<Transaction | null>(null);
+  const [confirmingId, setConfirmingId] = useState<string | null>(null);
   const toast = useToast();
 
   const handleConfirm = async (id: string) => {
+    setConfirmingId(id);
     try {
       const res = await fetch(`/api/transactions/${id}/confirm`, { method: "POST" });
       const data = await res.json();
@@ -52,6 +54,8 @@ export function TransactionTable({ transactions, onRefresh, showReviewActionsOnl
     } catch (err) {
       console.error("Confirmation error:", err);
       toast("error", "Terjadi kesalahan saat konfirmasi.");
+    } finally {
+      setConfirmingId(null);
     }
   };
 
@@ -59,7 +63,7 @@ export function TransactionTable({ transactions, onRefresh, showReviewActionsOnl
     return (
       <div className="bg-slate-900 border border-slate-800 rounded-xl p-12 text-center text-slate-400">
         <p className="text-sm font-medium text-slate-200">Belum ada transaksi.</p>
-        <span className="text-xs text-slate-500 block mt-1">Sinkronkan Gmail Anda atau ubah filter untuk melihat data.</span>
+        <span className="text-xs text-slate-400 block mt-1">Sinkronkan Gmail Anda atau ubah filter untuk melihat data.</span>
       </div>
     );
   }
@@ -92,9 +96,9 @@ export function TransactionTable({ transactions, onRefresh, showReviewActionsOnl
               </div>
               <div className="flex items-center gap-2">
                 {tx.type === "INCOME" ? <ArrowDownLeft className="w-4 h-4 text-emerald-400" /> : <ArrowUpRight className="w-4 h-4 text-rose-400" />}
-                <button onClick={() => setSelectedTx(tx)} className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition" aria-label="Edit transaksi"><Edit3 className="w-4 h-4" /></button>
+                <button onClick={() => setSelectedTx(tx)} className="p-2.5 min-h-11 min-w-11 flex items-center justify-center rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition" aria-label={"Edit transaksi " + tx.merchant}><Edit3 className="w-4 h-4" /></button>
                 {tx.status === "REVIEW" && showReviewActionsOnly && (
-                  <button onClick={() => handleConfirm(tx.id)} className="px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold flex items-center gap-1 transition"><CheckCircle2 className="w-4 h-4" /> Konfirmasi</button>
+                  <button onClick={() => handleConfirm(tx.id)} disabled={confirmingId === tx.id} aria-busy={confirmingId === tx.id} className="px-3 py-2.5 min-h-11 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold flex items-center gap-1 transition disabled:opacity-60"><CheckCircle2 className="w-4 h-4" /> {confirmingId === tx.id ? "Memproses..." : "Konfirmasi"}</button>
                 )}
               </div>
             </div>
@@ -132,9 +136,9 @@ export function TransactionTable({ transactions, onRefresh, showReviewActionsOnl
                   <td className="px-6 py-4 whitespace-nowrap text-xs"><StatusBadge status={tx.status} /></td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-xs">
                     <div className="flex items-center justify-end gap-2">
-                      <button onClick={() => setSelectedTx(tx)} className="p-1.5 rounded hover:bg-slate-700 text-slate-300 hover:text-white transition" aria-label="Edit transaksi"><Edit3 className="w-4 h-4" /></button>
+                      <button onClick={() => setSelectedTx(tx)} className="p-2 min-h-9 min-w-9 flex items-center justify-center rounded hover:bg-slate-700 text-slate-300 hover:text-white transition" aria-label={"Edit transaksi " + tx.merchant}><Edit3 className="w-4 h-4" /></button>
                       {tx.status === "REVIEW" && showReviewActionsOnly && (
-                        <button onClick={() => handleConfirm(tx.id)} className="px-2.5 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-medium flex items-center gap-1 shadow-sm transition"><CheckCircle2 className="w-3.5 h-3.5" /> Konfirmasi</button>
+                        <button onClick={() => handleConfirm(tx.id)} disabled={confirmingId === tx.id} aria-busy={confirmingId === tx.id} className="px-2.5 py-1.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-medium flex items-center gap-1 shadow-sm transition disabled:opacity-60"><CheckCircle2 className="w-3.5 h-3.5" /> {confirmingId === tx.id ? "Memproses..." : "Konfirmasi"}</button>
                       )}
                     </div>
                   </td>

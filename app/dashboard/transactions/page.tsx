@@ -62,7 +62,7 @@ export default function TransactionsPage() {
       {/* Filters */}
       <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col md:flex-row gap-4 items-center justify-between">
         <form onSubmit={handleSearchSubmit} className="relative w-full md:w-80">
-          <Search className="w-4 h-4 absolute left-3 top-3 text-slate-500" />
+          <Search className="w-4 h-4 absolute left-3 top-3.5 text-slate-400" />
           <input
             type="text"
             placeholder="Cari merchant, deskripsi..."

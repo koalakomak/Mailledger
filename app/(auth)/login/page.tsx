@@ -53,7 +53,7 @@ export default function LoginPage() {
           </button>
         </div>
 
-        <div className="mt-6 pt-6 border-t border-slate-800/80 text-[11px] text-slate-500 text-left space-y-1">
+        <div className="mt-6 pt-6 border-t border-slate-800/80 text-[11px] text-slate-400 text-left space-y-1">
           <p>✓ Izin Gmail (hanya baca untuk filter transaksi)</p>
           <p>✓ Izin Google Sheets (menulis baris spreadsheet)</p>
           <p>✓ Izin Google Drive read-only (memilih spreadsheet tujuan)</p>
