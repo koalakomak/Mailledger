@@ -21,16 +21,25 @@ export const authOptions: NextAuthOptions = {
       authorization: {
         params: {
           scope: GOOGLE_SCOPES,
+          // access_type offline -> refresh token diberikan sekali saat izin pertama,
+          // jadi sinkronisasi tetap jalan tanpa perlu login ulang.
           access_type: "offline",
-          prompt: "consent",
           response_type: "code",
+          // CATATAN: "prompt: consent" sengaja TIDAK dipakai agar Google tidak
+          // menampilkan layar persetujuan berulang setiap kali login.
         },
       },
     }),
   ],
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60, // 30 days
+    // Sesi aplikasi bertahan 30 hari; pengguna tidak diminta login Google lagi
+    // selama sesi ini masih berlaku.
+    maxAge: 30 * 24 * 60 * 60,
+    updateAge: 24 * 60 * 60,
+  },
+  jwt: {
+    maxAge: 30 * 24 * 60 * 60,
   },
   callbacks: {
     async signIn({ user, account }) {
