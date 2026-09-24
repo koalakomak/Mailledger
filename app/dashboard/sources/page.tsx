@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { SourcesGrid } from "@/components/sources/SourcesGrid";
-import { RefreshCw, Info } from "lucide-react";
+import { Info } from "lucide-react";
 
 export default function SourcesPage() {
   const [sources, setSources] = useState([]);
@@ -57,8 +57,10 @@ export default function SourcesPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 text-slate-400">
-        <RefreshCw className="w-6 h-6 animate-spin" />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="skeleton h-44" />
+        ))}
       </div>
     );
   }

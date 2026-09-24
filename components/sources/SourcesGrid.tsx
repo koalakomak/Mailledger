@@ -97,7 +97,7 @@ export function SourcesGrid({ sources, onToggle, onSyncSource }: Props) {
                 className="py-1.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium flex items-center gap-1 transition disabled:opacity-50"
                 title="Sinkronkan sumber ini sekarang"
               >
-                <RefreshCw className={`w-3.5 h-3.5 ${loadingId === src.id ? "animate-spin" : ""}`} />
+                <RefreshCw className={"w-3.5 h-3.5 " + (loadingId === src.id ? "animate-pulse" : "")} />
                 Sinkronkan
               </button>
             )}

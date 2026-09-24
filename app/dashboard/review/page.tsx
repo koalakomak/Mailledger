@@ -42,7 +42,7 @@ export default function ReviewPage() {
           disabled={loading}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 transition"
         >
-          <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} /> Muat Ulang
+          <RefreshCw className={"w-3.5 h-3.5 " + (loading ? "animate-pulse" : "")} /> Muat Ulang
         </button>
       </div>
 
@@ -54,8 +54,10 @@ export default function ReviewPage() {
       </div>
 
       {loading ? (
-        <div className="flex items-center justify-center h-64 text-slate-400">
-          <RefreshCw className="w-6 h-6 animate-spin" />
+        <div className="space-y-3">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="skeleton h-20" />
+          ))}
         </div>
       ) : (
         <TransactionTable

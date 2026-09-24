@@ -42,13 +42,15 @@ export default function ErrorsPage() {
           disabled={loading}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 transition"
         >
-          <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} /> Muat Ulang
+          <RefreshCw className={"w-3.5 h-3.5 " + (loading ? "animate-pulse" : "")} /> Muat Ulang
         </button>
       </div>
 
       {loading ? (
-        <div className="flex items-center justify-center h-64 text-slate-400">
-          <RefreshCw className="w-6 h-6 animate-spin" />
+        <div className="space-y-3">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="skeleton h-14" />
+          ))}
         </div>
       ) : logs.length === 0 ? (
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-12 text-center text-slate-400">

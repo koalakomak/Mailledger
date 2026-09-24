@@ -30,6 +30,18 @@ export async function GET(req: Request) {
     where.source = { slug: sourceSlug };
   }
 
+  // Filter rentang tanggal (dipakai halaman Kalender)
+  const from = searchParams.get("from");
+  const to = searchParams.get("to");
+  const fromDate = from ? new Date(from) : null;
+  const toDate = to ? new Date(to) : null;
+  if (fromDate && !isNaN(fromDate.getTime())) {
+    where.transactionDate = { ...(where.transactionDate || {}), gte: fromDate };
+  }
+  if (toDate && !isNaN(toDate.getTime())) {
+    where.transactionDate = { ...(where.transactionDate || {}), lt: toDate };
+  }
+
   if (query) {
     where.OR = [
       { merchant: { contains: query, mode: "insensitive" } },

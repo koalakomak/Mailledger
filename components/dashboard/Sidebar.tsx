@@ -13,12 +13,14 @@ import {
   Mail,
   LogOut,
   X,
+  CalendarDays,
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 
 const navigation = [
   { name: "Ringkasan", href: "/dashboard/overview", icon: LayoutDashboard },
   { name: "Transaksi", href: "/dashboard/transactions", icon: Receipt },
+  { name: "Kalender", href: "/dashboard/calendar", icon: CalendarDays },
   { name: "Tinjauan Manual", href: "/dashboard/review", icon: CheckSquare },
   { name: "Sumber", href: "/dashboard/sources", icon: Layers },
   { name: "Spreadsheet", href: "/dashboard/spreadsheet", icon: FileSpreadsheet },

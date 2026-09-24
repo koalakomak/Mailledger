@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { Sidebar } from "./Sidebar";
 import { Header } from "./Header";
 import { ToastProvider } from "../Toast";
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   const [navOpen, setNavOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <ToastProvider>
@@ -14,7 +16,12 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         <Sidebar open={navOpen} onClose={() => setNavOpen(false)} />
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
           <Header onMenuClick={() => setNavOpen(true)} navOpen={navOpen} />
-          <main className="flex-1 overflow-y-auto p-4 sm:p-8">{children}</main>
+          <main className="flex-1 overflow-y-auto p-4 sm:p-8">
+            {/* key = pathname -> animasi halus setiap pindah tab */}
+            <div key={pathname} className="page-enter">
+              {children}
+            </div>
+          </main>
         </div>
 
         {navOpen && (

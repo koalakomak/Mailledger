@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { SheetConnectCard } from "@/components/sheets/SheetConnectCard";
-import { RefreshCw } from "lucide-react";
 
 export default function SpreadsheetPage() {
   const [data, setData] = useState<{ spreadsheets: any[]; activeConnection: any }>({
@@ -43,8 +42,10 @@ export default function SpreadsheetPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 text-slate-400">
-        <RefreshCw className="w-6 h-6 animate-spin" />
+      <div className="space-y-4 max-w-2xl">
+        <div className="skeleton h-40" />
+        <div className="skeleton h-12" />
+        <div className="skeleton h-12" />
       </div>
     );
   }

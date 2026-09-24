@@ -18,9 +18,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Skrip kecil dijalankan sebelum konten dirender agar tema tersimpan
+  // langsung dipakai (tidak ada kedipan putih saat halaman dibuka).
+  const themeInit = [
+    "(function(){try{",
+    "var t=localStorage.getItem('theme');",
+    "if(t!=='light'&&t!=='dark'){t='dark';}",
+    "document.documentElement.classList.remove('light','dark');",
+    "document.documentElement.classList.add(t);",
+    "}catch(e){document.documentElement.classList.add('dark');}})();",
+  ].join("");
+
   return (
-    <html lang="id" className="dark">
+    <html lang="id" className="dark" suppressHydrationWarning>
       <body className={geistSans.variable + " bg-slate-950 text-slate-100 antialiased selection:bg-emerald-500 selection:text-black"}>
+        <script dangerouslySetInnerHTML={{ __html: themeInit }} />
         {children}
       </body>
     </html>

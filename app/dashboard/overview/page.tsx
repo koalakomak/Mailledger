@@ -14,7 +14,7 @@ const IncomeExpenseChart = dynamic(
     ),
   }
 );
-import { RefreshCw, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export default function OverviewPage() {
@@ -41,8 +41,20 @@ export default function OverviewPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 text-slate-400">
-        <RefreshCw className="w-6 h-6 animate-spin" />
+      <div className="space-y-8 max-w-7xl mx-auto">
+        <div className="space-y-2">
+          <div className="skeleton h-7 w-64" />
+          <div className="skeleton h-3 w-80" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="skeleton h-28" />
+          ))}
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="skeleton h-72" />
+          <div className="lg:col-span-2 skeleton h-72" />
+        </div>
       </div>
     );
   }

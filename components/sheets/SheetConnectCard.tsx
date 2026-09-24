@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FileSpreadsheet, Check, ExternalLink, RefreshCw } from "lucide-react";
+import { FileSpreadsheet, Check, ExternalLink } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
 interface SpreadsheetItem {
@@ -118,7 +118,11 @@ export function SheetConnectCard({ spreadsheets, connection, onConnect }: Props)
             className="px-5 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold flex items-center gap-2 shadow-sm transition disabled:opacity-50"
           >
             {isSubmitting ? (
-              <RefreshCw className="w-4 h-4 animate-spin" />
+              <span className="inline-flex items-center gap-2">
+                <span className="w-16 text-white/90">
+                  <span className="progress-bar" />
+                </span>
+              </span>
             ) : (
               <Check className="w-4 h-4" />
             )}
