@@ -11,7 +11,7 @@ interface Prefs {
 }
 
 const OPTIONS: { key: keyof Prefs; title: string; desc: string }[] = [
-  { key: "summaryDaily", title: "Harian", desc: "Rincian transaksi hari ini, dikirim setiap malam (± 20.00 WIB)." },
+  { key: "summaryDaily", title: "Harian", desc: "Rincian transaksi hari kemarin (00.00-24.00 WIB), dikirim setiap pagi (± 07.00 WIB)." },
   { key: "summaryWeekly", title: "Mingguan", desc: "Ringkasan 7 hari terakhir, dikirim setiap Senin pagi." },
   { key: "summaryMonthly", title: "Bulanan", desc: "Ringkasan bulan lalu, dikirim setiap tanggal 1." },
 ];
