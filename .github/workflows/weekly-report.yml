@@ -1,0 +1,17 @@
+name: MailLedger Weekly Summary
+
+on:
+  schedule:
+    - cron: '0 1 * * 1'
+  workflow_dispatch:
+
+jobs:
+  summary:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kirim ringkasan (weekly)
+        run: |
+          curl -fsS -m 240 -X GET \
+            -H "x-cron-secret: ${{ secrets.CRON_SECRET }}" \
+            "https://mailledger.vercel.app/api/reports/summary?period=weekly" \
+            || echo "::warning::Ringkasan weekly gagal dikirim"

@@ -1,4 +1,4 @@
-name: MailLedger Monthly Report
+name: MailLedger Monthly Summary
 
 on:
   schedule:
@@ -6,9 +6,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  monthly:
+  summary:
     runs-on: ubuntu-latest
     steps:
-      - name: Kirim rekap bulanan
+      - name: Kirim ringkasan (monthly)
         run: |
-          curl -fsS -m 240 -X GET             -H "x-cron-secret: ${{ secrets.CRON_SECRET }}"             "https://mailledger.vercel.app/api/reports/monthly"             || echo "::warning::Rekap bulanan gagal dikirim"
+          curl -fsS -m 240 -X GET \
+            -H "x-cron-secret: ${{ secrets.CRON_SECRET }}" \
+            "https://mailledger.vercel.app/api/reports/summary?period=monthly" \
+            || echo "::warning::Ringkasan monthly gagal dikirim"

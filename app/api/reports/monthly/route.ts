@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
-import { generateMonthlyReport } from "@/services/reports/monthly";
+import { generateMonthlyReport } from "@/services/reports/summary";
 
 /**
  * Endpoint rekap bulanan (dipanggil GitHub Actions tiap tanggal 1).

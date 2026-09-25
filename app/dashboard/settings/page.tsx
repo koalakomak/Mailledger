@@ -3,6 +3,7 @@
 import { useSession } from "next-auth/react";
 import { Shield, Mail } from "lucide-react";
 import { CategoryRulesManager } from "@/components/settings/CategoryRulesManager";
+import { SummaryPreferences } from "@/components/settings/SummaryPreferences";
 
 export default function SettingsPage() {
   const { data: session } = useSession();
@@ -57,6 +58,8 @@ export default function SettingsPage() {
           </div>
         </div>
       </div>
+
+      <SummaryPreferences />
 
       <CategoryRulesManager />
     </div>
